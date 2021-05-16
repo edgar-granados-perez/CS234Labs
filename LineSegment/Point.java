@@ -9,34 +9,42 @@ public class Point implements Comparable<Point>{
     }
     
     public int compareTo(Point b){
-        if (this.x == b.x){
+        if (this.angle() == b.angle()){
             return 0;
         }
-        return this.x>b.x?1:-1;
+        return this.angle()>b.angle()?1:-1;
     }
     public static Point[] sortPoint(Point[] a){
         MergeSort.mergeSort(a);
         return a;
     } 
     public String toString(){
-        return "(" + this.x + "," + this.y + ")";
+        return "(" + this.x + ", " + this.y + ")";
     }
     
     public double angle(){
-        return Math.atan2(this.x, this.y);
+        double angle = Math.atan2(this.x, this.y)*180/Math.PI;
+        long roundedAngles = Math.round(angle);
+        return (double) roundedAngles;
     }
-    public static Point [] collinearPoints(Point[] a){
+    public boolean equalTo (Point b){
+        boolean equals = false;
+        if(this.angle() == b.angle()){
+            equals = true;
+        }
+        return equals;
+    }
+    public static Point[] collinearPoints(Point[] a){
         List<Point> temp = new ArrayList<Point>();
         for (int i = 0; i < a.length-1;i++){
-            if (a[i].angle() == a[i+1].angle()){
+            if(a[i].equalTo(a[i+1])){
                 temp.add(a[i]);
-                temp.add(a[i+1]);
+                temp.add(a[i+1]);            
             }
-            break;
         }
-        Point[] lineSegment = new Point[temp.size()];
-        lineSegment = temp.toArray(lineSegment);
-        return lineSegment;
+        Point[] simpArray = new Point[temp.size()];
+        simpArray = temp.toArray(simpArray);
+        return simpArray;
     }
     public static Double[] anglesArray(Point[] a){
         Double[] angles = new Double[a.length];
